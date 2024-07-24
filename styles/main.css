@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
 
-* {font-family: 'Readex Pro';}
+* {font-family: 'Montserrat',sans-serif;}
 
 
 a {
@@ -22,6 +22,37 @@ hr {
     margin-bottom: 5%;
 }
 
+.profile-pic {
+    width: 300px;
+    height: auto;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.profile-pic-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.profile-pic-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-pic-container:hover .profile-pic {
+    opacity: 0;
+}
+
+.profile-pic-container:hover .profile-pic-hover {
+    opacity: 1;
+}
+@media (max-width: 650px) {
+    .profile-pic-container {
+        display: none;
+    }
+}
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
