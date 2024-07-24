@@ -64,7 +64,7 @@ PROJECTS = {
 }
 
 
-st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON,  layout="centered")
+st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 st.markdown(
     """
     <style>
@@ -189,6 +189,7 @@ system_prompt = {
         email: {EMAIL}
         github and linkedin: {SOCIAL_MEDIA}
         My resume is available for download in the top right corner below my email address.
+        I have a loving wife who I love so much. Her name is Hana and she is my world.
     Examples:
         example 1:
             Question: Who built this portfolio?
