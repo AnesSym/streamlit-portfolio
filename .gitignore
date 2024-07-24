@@ -1,6 +1,8 @@
 # Ignore .env files
 .env
 
+.streamlit/secrets.toml
+
 # Ignore virtual environment
 /venv
 

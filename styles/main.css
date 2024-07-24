@@ -50,7 +50,17 @@ hr {
 }
 @media (max-width: 650px) {
     .profile-pic-container {
-        display: none;
+        max-width: 250px;
+        max-height: 235px;
+    }
+}
+@media (max-width: 768px) {
+    .col-left, .col-right {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    .col-right {
+        margin-top: 20px !important;
     }
 }
 #MainMenu {visibility: hidden;}
