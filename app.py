@@ -215,16 +215,19 @@ chat_history = [system_prompt]
 
 # Function to get a response from the Groq AI model
 def get_groq_response(question):
-    chat_history.append({"role": "user", "content": question})
-    response = client.chat.completions.create(
-        model="llama3-70b-8192",
-        messages=chat_history,
-        max_tokens=150,
-        temperature=0.5
-    )
-    answer = response.choices[0].message.content
-    chat_history.append({"role": "assistant", "content": answer})
-    return answer
+    try:
+        chat_history.append({"role": "user", "content": question})
+        response = client.chat.completions.create(
+            model="llama3-70b-8192",
+            messages=chat_history,
+            max_tokens=150,
+            temperature=0.5
+        )
+        answer = response.choices[0].message.content
+        chat_history.append({"role": "assistant", "content": answer})
+        return answer
+    except Exception as e: 
+        return "Oops! Something went wrong. Please try again later."
 
 st.sidebar.write("---")
 st.sidebar.subheader("Navigation")
