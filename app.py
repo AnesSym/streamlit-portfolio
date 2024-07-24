@@ -189,6 +189,7 @@ system_prompt = {
         email: {EMAIL}
         github and linkedin: {SOCIAL_MEDIA}
         My resume is available for download in the top right corner below my email address.
+        Nothing else from my personal life should be answered.
     Examples:
         example 1:
             Question: Who built this portfolio?
