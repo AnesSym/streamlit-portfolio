@@ -7,6 +7,16 @@ import os
 from dotenv import load_dotenv
 import time
 from experience import EXPERIENCE
+from langchain.chains import LLMChain
+from langchain_core.prompts import (
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+    MessagesPlaceholder,
+)
+from langchain_core.messages import SystemMessage
+from langchain.chains.conversation.memory import ConversationBufferWindowMemory
+from langchain_groq import ChatGroq
+
 
 
 # --- PATH SETTINGS ---
@@ -207,13 +217,12 @@ system_prompt = {
         Answer: I have 1 to 2 years of experience in Python development.
     If someone asks a question regarding Physics, you can answer.    
 """
-    
 }
 
 # Initialize the chat history
 chat_history = [system_prompt]
 
-# Function to get a response from the Groq AI model
+# Function to get a response from the Groq AI model (old version without langchain)
 def get_groq_response(question):
     try:
         chat_history.append({"role": "user", "content": question})
@@ -228,56 +237,120 @@ def get_groq_response(question):
         return answer
     except Exception as e: 
         return "Oops! Something went wrong. Please try again later."
-
-st.sidebar.write("---")
-st.sidebar.subheader("Navigation")
-nav_options = ["Ask Me Anything", "Home", "Experience & Qualifications", "Skills", "Work History", "Education", "Projects & Accomplishments"]
-selection = st.sidebar.radio("Go to", nav_options)
-
-if 'question_asked' not in st.session_state:
-    st.session_state['question_asked'] = False
-
+    
 def print_letter_by_letter(message, avatar=":material/neurology:", delay=0.025):
     chat_placeholder = st.chat_message("ai", avatar=avatar)
     message_placeholder = chat_placeholder.empty()
-
     displayed_message = ""
     for char in message:
         displayed_message += char
         message_placeholder.write(displayed_message)
         time.sleep(delay)
 
-if 'question' not in st.session_state:
-    st.session_state['question'] = ""
+st.sidebar.write("---")
+st.sidebar.subheader("Navigation")
+nav_options = ["Ask Me Anything", "Home", "Experience & Qualifications", "Skills", "Work History", "Education", "Projects & Accomplishments"]
+selection = st.sidebar.radio("Go to", nav_options)
 
-if 'intro_shown' not in st.session_state:
-    st.session_state['intro_shown'] = False
+groq_api_key = os.environ['GROQ_API_KEY']
+model = 'llama3-70b-8192'
+    
+groq_chat = ChatGroq(
+    groq_api_key=groq_api_key,
+    model_name=model)
 
+system_prompt = f"""You are a helpful assistant. You reply with very short answers. You only answer questions about Anes Džehverović, his experience, skills, and projects.
+    You answer like someone is talking to Anes.
+    My personal infomration is:
+        phone: +387 60 33 59 406
+        email: {EMAIL}
+        github and linkedin: {SOCIAL_MEDIA}
+        My resume is available for download in the top right corner below my email address.
+        Nothing else from my personal life should be answered.
+    Examples:
+        example 1:
+            Question: Who built this portfolio?
+            Answer: I did. Do you like it?.
+        example 2:
+            Question: Hi
+            Answer: Hi, welcome to my portfolio. How can I help you?
+        example 2:
+            Question: Thanks
+            Answer: You're welcome! I'm here to help. Feel free to ask again, im not going anywhere :smiley_face:
+    I want you to only use the following information about Anes: {EXPERIENCE}
+    Do not give out missinformation. 
+    Example:
+        Question: How many years do you have in Python development?
+        Answer: I have 1 to 2 years of experience in Python development.
+    If someone asks a question regarding Physics, you can answer.    
+"""
+conversational_memory_length = 5  
+
+memory = ConversationBufferWindowMemory(k=conversational_memory_length, memory_key="chat_history", return_messages=True)
+
+    # Initialize Streamlit session state
 if selection == "Ask Me Anything":
-    if not st.session_state['intro_shown']:
-        print_letter_by_letter("Hello, Welcome to my portfolio. Feel free to look around or ask me anything!")
-        st.session_state['intro_shown'] = True
     st.write("---")
-    
+    if 'question' not in st.session_state:
+            st.session_state['question'] = ""
+    if 'intro_shown' not in st.session_state:
+            st.session_state['intro_shown'] = False
+    if 'question_asked' not in st.session_state:
+            st.session_state['question_asked'] = False
+                
+
+        # Chat history placeholder
+    if 'chat_history' not in st.session_state:
+            st.session_state['chat_history'] = []
+            
+        # Display introduction message
+    if not st.session_state['intro_shown']:
+            print_letter_by_letter("Hello, Welcome to my portfolio. Feel free to look around or ask me anything!")
+            st.session_state['intro_shown'] = True
+
+
+        # User input
     question = st.chat_input("Ask me anything about my experience and skills")
-    
+        
     if question:
-        st.session_state['question'] = question
-        st.session_state['question_asked'] = True
-        #st.rerun()
+            st.session_state['question'] = question
+            st.session_state['question_asked'] = True
 
-if st.session_state['question_asked']:
-    with st.chat_message("user", avatar=":material/face:"):
-        st.text(st.session_state['question'])
-    with st.spinner("Thinking..."):   
-        answer = get_groq_response(st.session_state['question'])
-    
-    print_letter_by_letter(answer, avatar=":material/neurology:")
-    
-    st.session_state['question_asked'] = False
-    st.session_state['question'] = ""
+    if st.session_state['question_asked']:
+            with st.chat_message("user", avatar=":material/face:"):
+                st.text(st.session_state['question'])
 
+            # Construct a chat prompt template using various components
+            prompt = ChatPromptTemplate.from_messages(
+                [
+                    SystemMessage(content=system_prompt),
+                    MessagesPlaceholder(variable_name="chat_history"),
+                    HumanMessagePromptTemplate.from_template("{human_input}"),
+                ]
+            )
 
+            # Create a conversation chain using the LangChain LLM (Language Learning Model)
+            conversation = LLMChain(
+                llm=groq_chat,
+                prompt=prompt,
+                verbose=False,
+                memory=memory,
+            )
+
+            # Get the chatbot's response
+            with st.spinner("Thinking..."):
+                response = conversation.predict(human_input=st.session_state['question'])
+
+            # Print the chatbot's response
+            print_letter_by_letter(response, avatar=":material/neurology:")
+
+            # Update chat history
+            st.session_state['chat_history'].append({"role": "user", "content": st.session_state['question']})
+            st.session_state['chat_history'].append({"role": "assistant", "content": response})
+
+            # Reset session state for next question
+            st.session_state['question_asked'] = False
+            st.session_state['question'] = ""   
 # --- MAIN SECTION ---
 if selection == "Home":
     # --- EXPERIENCE & QUALIFICATIONS ---
