@@ -16,8 +16,10 @@ from langchain_core.prompts import (
 from langchain_core.messages import SystemMessage
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain_groq import ChatGroq
-
-
+from streamlit_option_menu import option_menu
+from email_sender import send_email
+from streamlit_lottie import st_lottie
+import json
 
 # --- PATH SETTINGS ---
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
@@ -106,6 +108,9 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+# --- ANIMATION SETTINGS ---
+with open("assets/Animation3.json") as f:
+        animation_data = json.load(f)
 
 # --- LOAD CSS, PDF & PROFIL PIC ---
 with open(css_file) as f:
@@ -135,9 +140,6 @@ with col1:
         unsafe_allow_html=True
     )
 
-
-
-
 with col2:
     if 'intro_shown_name' not in st.session_state:
         st.session_state['intro_shown_name'] = False
@@ -154,16 +156,15 @@ with col2:
             displayed_text += char
             placeholder.markdown(f"<h1>{displayed_text}</h1>", unsafe_allow_html=True)
             time.sleep(0.01)
-
         time.sleep(0.1)  # Pause before showing the actual name
         placeholder.markdown(f"<h1>{NAME}</h1>", unsafe_allow_html=True)
         st.session_state['intro_shown_name'] = True
     else:
         st.title(NAME)
     st.write(DESCRIPTION)
-    st.write("📫", EMAIL)
+    st.write("**E-mail:**", EMAIL)
     st.download_button(
-        label=" 📄 Download Resume",
+        label="[Download Resume](#)",
         data=PDFbyte,
         file_name=resume_file.name,
         mime="application/octet-stream",
@@ -194,12 +195,21 @@ system_prompt = {
     "role": "system",
     "content": f"""You are a helpful assistant. You reply with very short answers. You only answer questions about Anes Džehverović, his experience, skills, and projects.
     You answer like someone is talking to Anes.
-    My personal infomration is:
+    My personal information is:
+        There is a "Send Me a message" section in my portfolio where you can send me a message.
         phone: +387 60 33 59 406
         email: {EMAIL}
         github and linkedin: {SOCIAL_MEDIA}
         My resume is available for download in the top right corner below my email address.
         Nothing else from my personal life should be answered.
+    Sections included in my Portfolio are:
+        - Home
+        - Experience & Qualifications
+        - Skills
+        - Work History
+        - Education
+        - Projects & Accomplishments
+        - Send Me a Message
     Examples:
         example 1:
             Question: Who built this portfolio?
@@ -247,17 +257,41 @@ def print_letter_by_letter(message, avatar=":material/neurology:", delay=0.025):
         message_placeholder.write(displayed_message)
         time.sleep(delay)
 
-st.sidebar.write("---")
-st.sidebar.subheader("Navigation")
-nav_options = ["Ask Me Anything", "Home", "Experience & Qualifications", "Skills", "Work History", "Education", "Projects & Accomplishments"]
-selection = st.sidebar.radio("Go to", nav_options)
+
+nav_options = {
+    "Ask Me Anything": "bi-question-circle-fill",
+    "About Me": "bi-person-fill",
+    "Experience & Qualifications": "bi-briefcase-fill",
+    "Skills": "bi-tools",
+    "Work History": "bi-calendar-fill",
+    "Education": "bi-mortarboard-fill",
+    "Projects & Accomplishments": "bi-award-fill",
+    "Send Me a Message": "bi-envelope-fill",
+}
+with st.sidebar:
+    selection = option_menu(
+        "Navigation",
+        options=list(nav_options.keys()),
+        icons=list(nav_options.values()),
+        menu_icon=None,
+        default_index=0,
+        orientation="vertical",
+        styles={
+            "container": {"padding": "0!important", "background-color": "#1E1E1E"},
+            "icon": {"color": "#fa8f56", "font-size": "25px"},
+            "nav-link": {"font-size": "16px", "text-align": "left", "margin": "0px", "--hover-color": "#222222", "color": "#FAF3E1"},
+            "nav-link-selected": {"background-color": "#222222", "color": "#fa8f56", "font-weight": "bold"},
+            "icon-selected": {"color": "#fff"}, 
+        },
+    )
 
 groq_api_key = os.environ['GROQ_API_KEY']
 model = 'llama3-70b-8192'
     
 groq_chat = ChatGroq(
     groq_api_key=groq_api_key,
-    model_name=model)
+    model_name=model,
+    max_tokens=300)
 
 system_prompt = f"""You are a helpful assistant. You reply with very short answers. You only answer questions about Anes Džehverović, his experience, skills, and projects.
     You answer like someone is talking to Anes.
@@ -266,7 +300,16 @@ system_prompt = f"""You are a helpful assistant. You reply with very short answe
         email: {EMAIL}
         github and linkedin: {SOCIAL_MEDIA}
         My resume is available for download in the top right corner below my email address.
+        You can send me a message in the "Send Me a Message" section.
         Nothing else from my personal life should be answered.
+    Sections included in my Portfolio are:
+        - About Me
+        - Experience & Qualifications
+        - Skills
+        - Work History
+        - Education
+        - Projects & Accomplishments
+        - Send Me a Message
     Examples:
         example 1:
             Question: Who built this portfolio?
@@ -282,13 +325,15 @@ system_prompt = f"""You are a helpful assistant. You reply with very short answe
     Example:
         Question: How many years do you have in Python development?
         Answer: I have 1 to 2 years of experience in Python development.
+    Example:
+        Question: Who built this portfolio or app or website?
+        Answer: I did ofcourse, to showcase my skills and experience. I used streamlit to build it.
     If someone asks a question regarding Physics, you can answer.    
 """
 conversational_memory_length = 5  
 
 memory = ConversationBufferWindowMemory(k=conversational_memory_length, memory_key="chat_history", return_messages=True)
 
-    # Initialize Streamlit session state
 if selection == "Ask Me Anything":
     st.write("---")
     if 'question' not in st.session_state:
@@ -320,7 +365,6 @@ if selection == "Ask Me Anything":
             with st.chat_message("user", avatar=":material/face:"):
                 st.text(st.session_state['question'])
 
-            # Construct a chat prompt template using various components
             prompt = ChatPromptTemplate.from_messages(
                 [
                     SystemMessage(content=system_prompt),
@@ -329,167 +373,91 @@ if selection == "Ask Me Anything":
                 ]
             )
 
-            # Create a conversation chain using the LangChain LLM (Language Learning Model)
             conversation = LLMChain(
                 llm=groq_chat,
                 prompt=prompt,
                 verbose=False,
                 memory=memory,
             )
+            animation_placeholder = st.empty()
 
-            # Get the chatbot's response
-            with st.spinner("Thinking..."):
-                response = conversation.predict(human_input=st.session_state['question'])
+# Unique key for each lottie animation
+            animation_key = f"lottie_animation_{time.time()}"
+            animation_placeholder = st.empty()
+            with animation_placeholder.container():
+                st_lottie(animation_data, height=50, width=80, key=animation_key)
+            time.sleep(1)
+            response = conversation.predict(human_input=st.session_state['question'])
+            animation_placeholder.empty()
 
-            # Print the chatbot's response
             print_letter_by_letter(response, avatar=":material/neurology:")
 
-            # Update chat history
             st.session_state['chat_history'].append({"role": "user", "content": st.session_state['question']})
             st.session_state['chat_history'].append({"role": "assistant", "content": response})
 
-            # Reset session state for next question
             st.session_state['question_asked'] = False
             st.session_state['question'] = ""   
 # --- MAIN SECTION ---
-if selection == "Home":
-    # --- EXPERIENCE & QUALIFICATIONS ---
-    st.write('\n')
-    st.subheader("Experience & Qulifications")
+if selection == "About Me":
+    st.subheader("About Me")
     st.write("---")
-    st.write(
-        """
-    - ✔️ Experienced in Data Science and backend architecture
-    - ✔️ Proficient in Python, Data Analysis, and Engineering
-    - ✔️ Strong foundation in statistical principles
-    - ✔️ Skilled in FastAPI, Docker, SQL, and Git
-    - ✔️ Created engaging learning experiences in Physics
-    - ✔️ Automated processes and improved efficiency
-    - ✔️ Excellent collaborator and proactive problem solver
+    st.write("""
+    Hey there! I'm Anes Dževherović, a passionate Data Science Engineer, Python Developer, and Applied Physicist, currently making waves in the bustling tech hubs of New York City and beyond. When I'm not diving deep into data or crafting sleek backend systems, you can find me unraveling the mysteries of the universe—or at least trying to.
 
+By day, I'm an API/Back-End Engineer at Skylark AI, where I engineer REST APIs and optimize backend services with a team of brilliant minds. By night (and often early mornings), I wear my Data Science Engineer hat at Caze AI, developing full-stack architectures, training models, and sometimes even juggling a bit of project management. Who needs sleep, right?
 
-    """
-    )
+Before the Big Apple claimed me, I was a Physics Teacher in Sarajevo, sharing my enthusiasm for the cosmos with curious minds at Richmond Park Education. I believe in making complex concepts as simple as possible—kind of like explaining quantum physics to your cat. Speaking of which, I have a couple of feline friends who love to "help" me with my work (by sitting on my keyboard).
 
+In my free time, you'll likely catch me engaging in some intense puzzle-solving sessions. Whether it's chess, Rubik's cubes, or some obscure brain-teaser, I'm all in. I also love gaming—because who doesn't need a good boss battle to unwind? My gaming setup might just rival my work setup (but don't tell my boss).
 
-    # --- SKILLS ---
+Oh, and did I mention I have a knack for creating AI models that generate unit tests and building web apps with Streamlit? When I'm not busy coding or playing games, I'm probably dreaming up my next big project or collaboration.
+
+So, that's a bit about me—a tech enthusiast with a love for cats, puzzles, and the occasional deep-space pondering. Feel free to explore my projects, connect with me, or just drop a message to say hi. Let's make something amazing together!
+
+""")
     
-    st.write('\n')
-    st.subheader("Hard Skills")
+    #st_lottie(animation_data, height=300, width=300)
+
+if selection == "Send Me a Message":
     st.write("---")
-    st.write(
-        """
-        - 👩‍💻 Programming: Python (FastAPI, Flask), SQL, Shell Scripting
-        - 📊 Data Visualization: Streamlit, Pandas, Custom Plotting Libraries
-        - 📚 Modeling: Machine Learning, Data Preprocessing, Model Training
-        - 🗄️ Databases: SQLAlchemy, Postgres, Dockerized Databases
-        - 🧠 AI: Llama models, LangChain, OpenAI,  Groq
-        """
-    )
+    with st.chat_message("user", avatar=":material/neurology:"):
+         st.write("Feel free to send me a message. I'll get back to you as soon as possible!")
+    with st.form("contact_form"):
+        user_name = st.text_input("Your Name", placeholder="John Doe")
+        user_email = st.text_input("Your Email", placeholder="johndoe@example.com")
+        user_message = st.text_area("Your Message", placeholder="Hello Anes, I would like to connect with you.")
+        submit_button = st.form_submit_button("Send Message")
 
-
-    # --- WORK HISTORY ---
-    st.write('\n')
-    st.subheader("Work History")
-    st.write("---")
-
-    st.write("🚧", "Transfered to **API/Back-End Engineer | [Skylark.ai](https://www.skylarkai.com)**")
-    st.write("07/2024 - Present")
-    st.write(
-        """
-    - ► Engineering APIs and back-end systems for enhanced data processing
-    - ► Collaborating with cross-functional teams to integrate and optimize backend services
-    """
-    )
-    st.write('\n')
-    st.write("🚧", "**Data Science Engineer | [Caze AI](https://caze.ai/)**")
-    st.write("02/2024 - Present")
-    st.write(
-        """
-    - ► Developed full-stack backend architecture and data preprocessing pipelines
-    - ► Implemented machine learning models and managed projects, shaping strategic direction
-    """
-    )
-    st.write('\n')
-    st.write("🚧", "**Physics Teacher | [Richmond Park Education](https://secondary.rps.edu.ba/en/)**")
-    st.write("08/2023 - 06/2024")
-    st.write(
-        """
-    - ► Created engaging, interactive learning experiences for students
-    - ► Simplified complex physics concepts to foster a love for the subject
-    """
-    )
-    st.write('\n')
-    st.write("🚧", "**Sales Automation Director | [Two Lights](https://twolights.dev/)**")
-    st.write("09/2023 - 02/2024")
-    st.write(
-        """
-    - ► Designed and coded standardized email templates for communication
-    - ► Automated personalized email distribution, improving engagement and response times
-    - ► Integrated email systems with databases and CRM platforms for seamless operation
-    """
-    )
-    st.write('\n')
-    st.write("🚧", "**Intern | [Symphony](https://symphony.is/)**")
-    st.write("02/2023 - 05/2023")
-    st.write(
-        """
-    - ► Processed and visualized various data types
-    - ► Created a custom plotting library and backend services
-    - ► Containerized backend services and databases, and implemented machine learning models
-    """
-    )
-    st.write('\n')
-    st.write("🚧", "**Intern | [Cosylab](https://cosylab.com/)**")
-    st.write("07/2022 - 08/2022")
-    st.write(
-        """
-    - ► Learned Linux, GIT, SVN, Python, Shell Scripting, EPICS software
-    - ► Designed project architectures during the EPICS academy
-    """
-    )
-    st.write('\n')
-    st.subheader("Education")
-    st.write("---")
-    st.write("🎓 **Master's degree, Applied Physics | [University of Sarajevo](https://fizika.pmf.unsa.ba/)**")
-    st.write("Oct 2023 — Present")
-    st.write(
-        """
-        Pursuing a Master's degree in Applied Physics, focusing on advanced topics in physics and their applications in various fields.
-        Currently working on finding the best solution for a flattening filter using Monte Carlo simulations.
-        """
-    )
-    st.write('\n')
-    st.write("🎓 **Bachelor's degree, Applied Physics | [University of Sarajevo](https://fizika.pmf.unsa.ba/)**")
-    st.write("Sep 2018 — Jan 2023")
-    st.write(
-        """
-        Completed a Bachelor's degree in Applied Physics, gaining strong abilities to solve problems, strong analytical skills, and programming skills.
-        """
-    )
-
-    # --- Projects & Accomplishments ---
-    st.write('\n')
-    st.subheader("Projects & Accomplishments")
-    st.write("---")
-    for project, details in PROJECTS.items():
-        with st.expander(project):
-            st.write(details['description'])
-            st.write(f"**Skills:** {', '.join(details['skills'])}")
-            st.markdown(f"[Learn more]({details['link']})", unsafe_allow_html=True)
-
+        if submit_button:
+            if user_name and user_email and user_message:
+                success, message = send_email(user_name, user_email, user_message)
+                message_placeholder = st.empty()
+                if success:
+                    animation_key = f"lottie_animation_{time.time()}"
+                    animation_placeholder = st.empty()
+                    with animation_placeholder.container():
+                        st_lottie(animation_data, height=80, width=650, key=animation_key)
+                    time.sleep(2)
+                    animation_placeholder.empty()
+                    message_placeholder.success("Message sent successfully!")
+                    time.sleep(3)
+                    message_placeholder.empty()
+                else:
+                    st.error(f"{message}")
+            else:
+                st.error("Please fill out all fields.")
 elif selection == "Experience & Qualifications":
     st.subheader("Experience & Qualifications")
     st.write("---")
     st.write(
         """
-        - ✔️ Experienced in Data Science and backend architecture
-        - ✔️ Proficient in Python, Data Analysis, and Engineering
-        - ✔️ Strong foundation in statistical principles
-        - ✔️ Skilled in FastAPI, Docker, SQL, and Git
-        - ✔️ Created engaging learning experiences in Physics
-        - ✔️ Automated processes and improved efficiency
-        - ✔️ Excellent collaborator and proactive problem solver
+        - Experienced in Data Science and backend architecture
+        - Proficient in Python, Data Analysis, and Engineering
+        - Strong foundation in statistical principles
+        - Skilled in FastAPI, Docker, SQL, and Git
+        - Created engaging learning experiences in Physics
+        - Automated processes and improved efficiency
+        - Excellent collaborator and proactive problem solver
         """
     )
 
@@ -498,70 +466,70 @@ elif selection == "Skills":
     st.write("---")
     st.write(
         """
-        - 👩‍💻 Programming: Python (FastAPI, Flask), SQL, Shell Scripting
-        - 📊 Data Visualization: Streamlit, Pandas, Custom Plotting Libraries
-        - 📚 Modeling: Machine Learning, Data Preprocessing, Model Training
-        - 🗄️ Databases: SQLAlchemy, Postgres, Dockerized Databases
-        - 🧠 AI: Llama models, LangChain, OpenAI,  Groq
+        - **Programming**: Python (FastAPI, Flask), SQL, Shell Scripting
+        - **Data Visualization**: Streamlit, Pandas, Custom Plotting Libraries
+        - **Modeling**: Machine Learning, Data Preprocessing, Model Training
+        - **Databases**: SQLAlchemy, Postgres, Dockerized Databases
+        - **AI**: Llama models, LangChain, OpenAI,  Groq
         """
     )
 
 elif selection == "Work History":
     st.subheader("Work History")
     st.write("---")
-    st.write("🚧", "Transferred to **API/Back-End Engineer | [Skylark.ai](https://www.skylarkai.com)**")
+    st.write("Transferred to **API/Back-End Engineer | [Skylark.ai](https://www.skylarkai.com)**")
     st.write("07/2024 - Present")
     st.write(
         """
-        - ► Engineering APIs and back-end systems for enhanced data processing
-        - ► Collaborating with cross-functional teams to integrate and optimize backend services
+        - Engineering APIs and back-end systems for enhanced data processing
+        - Collaborating with cross-functional teams to integrate and optimize backend services
         """
     )
     st.write('\n')
-    st.write("🚧", "**Data Science Engineer | [Caze AI](https://caze.ai/)**")
+    st.write("**Data Science Engineer | [Caze AI](https://caze.ai/)**")
     st.write("02/2024 - Present")
     st.write(
         """
-        - ► Developed full-stack backend architecture and data preprocessing pipelines
-        - ► Implemented machine learning models and managed projects, shaping strategic direction
+        - Developed full-stack backend architecture and data preprocessing pipelines
+        - Implemented machine learning models and managed projects, shaping strategic direction
         """
     )
     st.write('\n')
-    st.write("🚧", "**Physics Teacher | [Richmond Park Education](https://secondary.rps.edu.ba/en/)**")
+    st.write("**Physics Teacher | [Richmond Park Education](https://secondary.rps.edu.ba/en/)**")
     st.write("08/2023 - 06/2024")
     st.write(
         """
-        - ► Created engaging, interactive learning experiences for students
-        - ► Simplified complex physics concepts to foster a love for the subject
+        - Created engaging, interactive learning experiences for students
+        - Simplified complex physics concepts to foster a love for the subject
         """
     )
     st.write('\n')
-    st.write("🚧", "**Sales Automation Director | [Two Lights](https://twolights.dev/)**")
+    st.write("**Sales Automation Director | [Two Lights](https://twolights.dev/)**")
     st.write("09/2023 - 02/2024")
     st.write(
         """
-        - ► Designed and coded standardized email templates for communication
-        - ► Automated personalized email distribution, improving engagement and response times
-        - ► Integrated email systems with databases and CRM platforms for seamless operation
+        - Designed and coded standardized email templates for communication
+        - Automated personalized email distribution, improving engagement and response times
+        - Integrated email systems with databases and CRM platforms for seamless operation
         """
     )
     st.write('\n')
-    st.write("🚧", "**Intern | [Symphony](https://symphony.is/)**")
+    st.write("**Intern | [Symphony](https://symphony.is/)**")
     st.write("02/2023 - 05/2023")
     st.write(
         """
-        - ► Processed and visualized various data types
-        - ► Created a custom plotting library and backend services
-        - ► Containerized backend services and databases, and implemented machine learning models
+        - Processed and visualized various data types
+        - Created a custom plotting library and backend services
+        - Containerized backend services and databases, and implemented machine learning models
         """
     )
     st.write('\n')
-    st.write("🚧", "**Intern | [Cosylab](https://cosylab.com/)**")
+    st.write("**Intern | [Cosylab](https://cosylab.com/)**")
     st.write("07/2022 - 08/2022")
     st.write(
         """
-        - ► Learned Linux, GIT, SVN, Python, Shell Scripting, EPICS software
-        - ► Designed project architectures during the EPICS academy
+        - Learned Linux, GIT, SVN, Python, Shell Scripting, EPICS software
+        - Designed project architectures during the EPICS academy
         """
     )
 

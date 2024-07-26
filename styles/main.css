@@ -1,21 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swa');
 
 
-* {font-family: 'Montserrat',sans-serif;}
+* {font-family: "Rethink Sans", sans-serif;}
 
 
 a {
     text-decoration: none;
-    color: white !important;
+    color: #faf3e1 !important;
     font-weight: 500;
 }
-
+h1 {
+    color: #fa8f56 !important;
+}
 a:hover {
-    color: #d33682 !important;
+    color: #ffd971 !important;
     text-decoration: none;
 }
 
-ul {list-style-type: none;}
+ul {list-style-type: circle;}
+
+
 
 hr {
     margin-top: 0px;
