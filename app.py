@@ -145,9 +145,8 @@ with col2:
         st.session_state['intro_shown_name'] = False
 
     if not st.session_state['intro_shown_name']:
-        import_text = """streamlit run .\portfolio.py
+        import_text = r"""streamlit run .\portfolio.py
                          from information.py import NAME
-                         
                             """
         placeholder = st.empty()
         displayed_text = ""
@@ -155,7 +154,7 @@ with col2:
         for char in import_text:
             displayed_text += char
             placeholder.markdown(f"<h1>{displayed_text}</h1>", unsafe_allow_html=True)
-            time.sleep(0.01)
+            time.sleep(0.01) 
         time.sleep(0.1)  # Pause before showing the actual name
         placeholder.markdown(f"<h1>{NAME}</h1>", unsafe_allow_html=True)
         st.session_state['intro_shown_name'] = True
@@ -182,72 +181,6 @@ for index, (platform, link) in enumerate(SOCIAL_MEDIA.items()):
 env_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path=env_path)
 
-# Initialize Groq client
-api_key = os.getenv("GROQ_API_KEY")
-api_key = st.secrets["GROQ_API_KEY"]
-if not api_key:
-    raise ValueError("GROQ_API_KEY environment variable not set.")
-client = Groq(api_key=api_key)
-
-
-
-system_prompt = {
-    "role": "system",
-    "content": f"""You are a helpful assistant. You reply with very short answers. You only answer questions about Anes Džehverović, his experience, skills, and projects.
-    You answer like someone is talking to Anes.
-    My personal information is:
-        There is a "Send Me a message" section in my portfolio where you can send me a message.
-        phone: +387 60 33 59 406
-        email: {EMAIL}
-        github and linkedin: {SOCIAL_MEDIA}
-        My resume is available for download in the top right corner below my email address.
-        Nothing else from my personal life should be answered.
-    Sections included in my Portfolio are:
-        - Home
-        - Experience & Qualifications
-        - Skills
-        - Work History
-        - Education
-        - Projects & Accomplishments
-        - Send Me a Message
-    Examples:
-        example 1:
-            Question: Who built this portfolio?
-            Answer: I did. Do you like it?.
-        example 2:
-            Question: Hi
-            Answer: Hi, welcome to my portfolio. How can I help you?
-        example 2:
-            Question: Thanks
-            Answer: You're welcome! I'm here to help. Feel free to ask again, im not going anywhere :smiley_face:
-    I want you to only use the following information about Anes: {EXPERIENCE}
-    Do not give out missinformation. 
-    Example:
-        Question: How many years do you have in Python development?
-        Answer: I have 1 to 2 years of experience in Python development.
-    If someone asks a question regarding Physics, you can answer.    
-"""
-}
-
-# Initialize the chat history
-chat_history = [system_prompt]
-
-# Function to get a response from the Groq AI model (old version without langchain)
-def get_groq_response(question):
-    try:
-        chat_history.append({"role": "user", "content": question})
-        response = client.chat.completions.create(
-            model="llama3-70b-8192",
-            messages=chat_history,
-            max_tokens=150,
-            temperature=0.5
-        )
-        answer = response.choices[0].message.content
-        chat_history.append({"role": "assistant", "content": answer})
-        return answer
-    except Exception as e: 
-        return "Oops! Something went wrong. Please try again later."
-    
 def print_letter_by_letter(message, avatar=":material/neurology:", delay=0.025):
     chat_placeholder = st.chat_message("ai", avatar=avatar)
     message_placeholder = chat_placeholder.empty()
@@ -416,36 +349,6 @@ So, that's a bit about me—a tech enthusiast with a love for cats, puzzles, and
 
 """)
     
-    #st_lottie(animation_data, height=300, width=300)
-
-if selection == "Send Me a Message":
-    st.write("---")
-    with st.chat_message("user", avatar=":material/neurology:"):
-         st.write("Feel free to send me a message. I'll get back to you as soon as possible!")
-    with st.form("contact_form"):
-        user_name = st.text_input("Your Name", placeholder="John Doe")
-        user_email = st.text_input("Your Email", placeholder="johndoe@example.com")
-        user_message = st.text_area("Your Message", placeholder="Hello Anes, I would like to connect with you.")
-        submit_button = st.form_submit_button("Send Message")
-
-        if submit_button:
-            if user_name and user_email and user_message:
-                success, message = send_email(user_name, user_email, user_message)
-                message_placeholder = st.empty()
-                if success:
-                    animation_key = f"lottie_animation_{time.time()}"
-                    animation_placeholder = st.empty()
-                    with animation_placeholder.container():
-                        st_lottie(animation_data, height=80, width=650, key=animation_key)
-                    time.sleep(2)
-                    animation_placeholder.empty()
-                    message_placeholder.success("Message sent successfully!")
-                    time.sleep(3)
-                    message_placeholder.empty()
-                else:
-                    st.error(f"{message}")
-            else:
-                st.error("Please fill out all fields.")
 elif selection == "Experience & Qualifications":
     st.subheader("Experience & Qualifications")
     st.write("---")
@@ -561,3 +464,32 @@ elif selection == "Projects & Accomplishments":
             st.write(details['description'])
             st.write(f"**Skills:** {', '.join(details['skills'])}")
             st.markdown(f"[Learn more]({details['link']})", unsafe_allow_html=True)
+
+elif selection == "Send Me a Message":
+    st.write("---")
+    with st.chat_message("user", avatar=":material/neurology:"):
+         st.write("Feel free to send me a message. I'll get back to you as soon as possible!")
+    with st.form("contact_form"):
+        user_name = st.text_input("Your Name", placeholder="John Doe")
+        user_email = st.text_input("Your Email", placeholder="johndoe@example.com")
+        user_message = st.text_area("Your Message", placeholder="Hello Anes, I would like to connect with you.")
+        submit_button = st.form_submit_button("Send Message")
+
+        if submit_button:
+            if user_name and user_email and user_message:
+                success, message = send_email(user_name, user_email, user_message)
+                message_placeholder = st.empty()
+                if success:
+                    animation_key = f"lottie_animation_{time.time()}"
+                    animation_placeholder = st.empty()
+                    with animation_placeholder.container():
+                        st_lottie(animation_data, height=80, width=650, key=animation_key)
+                    time.sleep(2)
+                    animation_placeholder.empty()
+                    message_placeholder.success("Message sent successfully!")
+                    time.sleep(3)
+                    message_placeholder.empty()
+                else:
+                    st.error(f"{message}")
+            else:
+                st.error("Please fill out all fields.")

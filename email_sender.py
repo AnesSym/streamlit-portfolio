@@ -42,18 +42,12 @@ def send_email(user_name, user_email, user_message):
             server.login(receiver_email, password)
             server.sendmail(receiver_email, receiver_email, message.as_string())
             server.quit()
-            return True, None
+            return True
         except Exception as e:
-            return False, f"Error sending email: {e}"
+            st.error(f"Error sending email: {e}")
+            return False
     except Exception as e:
         pass
     
 if __name__ == "__main__":
-    user_name = input("Enter your name: ")
-    user_email = input("Enter your email: ")
-    user_message = input("Enter your message: ")
-    success, error = send_email(user_name, user_email, user_message)
-    if success:
-        print("Email sent successfully!")
-    else:
-        print(f"Failed to send email. Error: {error}")
+    send_email()
