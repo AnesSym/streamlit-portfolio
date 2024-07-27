@@ -5,6 +5,8 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 import re
+import time
+
 env_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path=env_path)
 
@@ -16,11 +18,11 @@ def send_email(user_name, user_email, user_message):
     try:
         if not is_valid_email(user_email):
             return False, "Invalid email address"
+        
         sender_email = user_email
         receiver_email = "anesdzehverovic@gmail.com"
         password = os.getenv("EMAIL_PASSWORD")  
 
-    
         message = MIMEMultipart("alternative")
         message["Subject"] = "New Message from Portfolio Contact Form"
         message["From"] = sender_email
@@ -42,12 +44,15 @@ def send_email(user_name, user_email, user_message):
             server.login(receiver_email, password)
             server.sendmail(receiver_email, receiver_email, message.as_string())
             server.quit()
-            return True
+            return True, "Email sent!"
         except Exception as e:
-            st.error(f"Error sending email: {e}")
-            return False
+            return False, f"Error sending email: {e}"
     except Exception as e:
-        pass
+        return False, f"Unexpected error: {e}"
     
 if __name__ == "__main__":
-    send_email()
+    user_name = "John Doe"
+    user_email = "johndoe@example.com"
+    user_message = "Hello, this is a test message"
+    success, message = send_email(user_name, user_email, user_message)
+    print(success, message)

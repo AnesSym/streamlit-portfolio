@@ -486,10 +486,10 @@ elif selection == "Send Me a Message":
                         st_lottie(animation_data, height=80, width=650, key=animation_key)
                     time.sleep(2)
                     animation_placeholder.empty()
-                    message_placeholder.success("Message sent successfully!")
+                    message_placeholder.success(message)
                     time.sleep(3)
                     message_placeholder.empty()
                 else:
-                    st.error(f"{message}")
+                    st.error(message)
             else:
                 st.error("Please fill out all fields.")
