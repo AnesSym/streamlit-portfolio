@@ -339,7 +339,7 @@ if selection == "About Me":
 
 By day, I'm an API/Back-End Engineer at Skylark AI, where I engineer REST APIs and optimize backend services with a team of brilliant minds. By night (and often early mornings), I wear my Data Science Engineer hat at Caze AI, developing full-stack architectures, training models, and sometimes even juggling a bit of project management. Who needs sleep, right?
 
-Before the Big Apple claimed me, I was a Physics Teacher in Sarajevo, sharing my enthusiasm for the cosmos with curious minds at Richmond Park Education. I believe in making complex concepts as simple as possible—kind of like explaining quantum physics to your cat. Speaking of which, I have a couple of feline friends who love to "help" me with my work (by sitting on my keyboard).
+Before the Big Apple claimed me, I was a Physics Teacher in Sarajevo, sharing my enthusiasm for the cosmos with curious minds at Richmond Park Education. I believe in making complex concepts as simple as possible—kind of like explaining quantum physics to your cat. Speaking of which, I have a couple of feline friends who love to "help" me with my work (byyyyyyyyy sitting on my keyboard).
 
 In my free time, you'll likely catch me engaging in some intense puzzle-solving sessions. Whether it's chess, Rubik's cubes, or some obscure brain-teaser, I'm all in. I also love gaming—because who doesn't need a good boss battle to unwind? My gaming setup might just rival my work setup (but don't tell my boss).
 

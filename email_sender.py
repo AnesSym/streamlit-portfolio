@@ -33,7 +33,8 @@ def send_email(user_name, user_email, user_message):
 
         Name: {user_name}
         Email: {user_email}
-        Message: {user_message}
+        Message: 
+        {user_message}
         """
         part = MIMEText(text, "plain")
         message.attach(part)
