@@ -10,10 +10,15 @@ a {
     font-weight: 500;
 }
 h1 {
-    color: #fa8f56 !important;
+    background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 50%, #C084FC 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    font-weight: 700 !important;
+    text-shadow: none !important;
 }
 a:hover {
-    color: #ffd971 !important;
+    color: #C084FC !important;  /* Purple to match theme */
     text-decoration: none;
 }
 
@@ -70,3 +75,132 @@ hr {
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
+
+/* For navigation links - same as button hover effect */
+nav-link:hover {
+    background: linear-gradient(135deg, #4C1D95 0%, #6366F1 100%) !important;
+    color: #F8FAFC !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+    border-color: #6366F1 !important;
+}
+
+/* For buttons */
+button:hover {
+    background: linear-gradient(135deg, #4C1D95 0%, #6366F1 100%) !important;
+    color: #F8FAFC !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+    border-color: #6366F1 !important;
+}
+
+/* User message styling - backup CSS */
+.user-message-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+    margin-left: 20px;
+}
+
+.user-message-box {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%) !important;
+    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    padding: 12px 16px !important;
+    border-radius: 16px !important;
+    font-family: 'Inter', sans-serif !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2) !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    white-space: normal !important;
+    max-width: 70% !important;
+    width: fit-content !important;
+    min-width: 50px !important;
+    text-align: right !important;
+    color: #E2E8F0 !important;
+}
+
+.user-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    font-family: 'Inter', sans-serif !important;
+    margin-right: 8px !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4) !important;
+}
+
+/* Enhanced form styling for better integration with toast notifications */
+.contact-form-container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Improved button states */
+.stButton > button {
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 16px 32px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    height: 56px !important;
+    width: 100% !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.stButton > button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4) !important;
+    background: linear-gradient(135deg, #4C1D95 0%, #7C3AED 100%) !important;
+}
+
+.stButton > button:active {
+    transform: translateY(0px) !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+}
+
+/* Button ripple effect */
+.stButton > button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.stButton > button:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Smooth transitions for form elements */
+.stTextInput > div > div > input,
+.stTextArea > div > div > textarea {
+    transition: all 0.3s ease !important;
+}
+
+.stTextInput > div > div > input:focus,
+.stTextArea > div > div > textarea:focus {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25) !important;
+}

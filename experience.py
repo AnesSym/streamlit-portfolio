@@ -1,5 +1,19 @@
 EXPERIENCE = """
-July 2024 — Present: API/Back-End Engineer, [Skylark AI](www.skylarkai.com), New York City
+November 2024 — Present: AI Engineer, [Social Explorer](https://www.socialexplorer.com/), Remote (New York City)
+- Designed and implemented fully AI-driven data service architecture using FastAPI framework
+- Developed semantic search capabilities across entire Social Explorer databases using OpenAI and Pinecone vector database
+- Created comprehensive data pipeline to migrate data from standard databases to vector databases
+- Specialized in data filtering, reranking, and preprocessing for optimal search performance
+- Implemented AutoGen framework for multi-agent workflows and automated data processing
+- Architected scalable AI infrastructure to enable intelligent data discovery and retrieval
+
+November 2024 — January 2025: Data Engineer, [Social Explorer](https://www.socialexplorer.com/), Remote (New York City)
+- Developed data processing pipelines and machine learning algorithms for predictive analytics
+- Implemented computer vision models from Meta for advanced data analysis
+- Created and maintained web scraping scripts for data acquisition
+- Processed and transformed large-scale datasets for machine learning applications
+
+July 2024 — November 2024: API/Back-End Engineer, [Skylark AI](www.skylarkai.com), New York City
 - Engineering REST APIs and back-end systems for enhanced data processing
 - Collaborating with cross-functional teams to integrate and optimize backend services
 
@@ -43,14 +57,21 @@ Education:
   - Gained strong abilities to solve problems, strong analytical skills, and programming skills.
 
 Skills:
-- Python, Data Analysis, Data Engineering, FastAPI, Git, SQL, SQLAlchemy, Data Science, Machine Learning, Cloud Computing, Docker, Streamlit, Shell Scripting
+- Python, Data Analysis, Data Engineering, FastAPI, Git, SQL, SQLAlchemy, Data Science, Machine Learning, Cloud Computing, Docker, Streamlit, Shell Scripting, Web Scraping
   Programming: Python (FastAPI, Flask), SQL, Shell Scripting
   Data Visualization: Streamlit, Pandas, Custom Plotting Libraries
-  Modeling: Machine Learning, Data Preprocessing, Model Training
-  Databases: SQLAlchemy, Postgres, Dockerized Databases
-  AI: Llama models, LangChain, opeanAI, Groq
+  Modeling: Machine Learning, Data Preprocessing, Model Training, Computer Vision
+  Databases: SQLAlchemy, Postgres, Dockerized Databases, Vector Databases, Pinecone
+  AI: Llama models, LangChain, OpenAI, Groq, AutoGen, Semantic Search, Data Filtering and Reranking
+  Infrastructure: Data Pipeline Development, AI Architecture Design, Multi-Agent Systems
 
 Projects:
+- AI-Driven Data Service | [Social Explorer](https://www.socialexplorer.com/)
+  - Architected comprehensive AI service enabling semantic search across Social Explorer's entire database ecosystem
+  - Implemented FastAPI backend with OpenAI integration and Pinecone vector database for intelligent data retrieval
+  - Developed automated data migration pipelines and advanced filtering/reranking systems
+  - Skills: Python, FastAPI, OpenAI, Pinecone, Vector Databases, Semantic Search, AutoGen
+
 - External Collaborator | [Faculty of Electrical Engineering (ETF)](https://dsai.etf.unsa.ba/)
   - Collaborated under Prof. Dr. Amila Akagic. Contributed to data science and AI projects, enhancing research and development efforts.
   - Skills: Python, Machine Learning, Data Analysis
