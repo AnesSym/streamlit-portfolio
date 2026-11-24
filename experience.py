@@ -1,101 +1,91 @@
 EXPERIENCE = """
-November 2024 — Present: AI Engineer, [Social Explorer](https://www.socialexplorer.com/), Remote (New York City)
-- Designed and implemented fully AI-driven data service architecture using FastAPI framework
-- Developed semantic search capabilities across entire Social Explorer databases using OpenAI and Pinecone vector database
-- Created comprehensive data pipeline to migrate data from standard databases to vector databases
-- Specialized in data filtering, reranking, and preprocessing for optimal search performance
-- Implemented AutoGen framework for multi-agent workflows and automated data processing
-- Architected scalable AI infrastructure to enable intelligent data discovery and retrieval
+Anes Džehverović, AI Engineer, based in Sarajevo, Bosnia and Herzegovina.
 
-November 2024 — January 2025: Data Engineer, [Social Explorer](https://www.socialexplorer.com/), Remote (New York City)
-- Developed data processing pipelines and machine learning algorithms for predictive analytics
-- Implemented computer vision models from Meta for advanced data analysis
-- Created and maintained web scraping scripts for data acquisition
-- Processed and transformed large-scale datasets for machine learning applications
+Profile:
+AI Engineer with 3 years of experience building production LLM systems: multi-agent chatbots, semantic search
+over millions of records, and AI evaluation and monitoring. Currently an AI engineer on a live data platform,
+where my agent architecture powers four production chatbots. Alongside this, I lead AI research
+projects, from agent frameworks that analyse codebases to AI tools for scientific research. I work daily with
+Anthropic's Claude models and tooling, including the Claude API, Claude Code, MCP, agent skills and subagents.
+A background in applied physics shapes how I test, measure and debug AI systems.
 
-July 2024 — November 2024: API/Back-End Engineer, [Skylark AI](www.skylarkai.com), New York City
-- Engineering REST APIs and back-end systems for enhanced data processing
-- Collaborating with cross-functional teams to integrate and optimize backend services
+Employment history:
 
-Feb 2024 — Present: Data Science Engineer, [Caze AI](caze.ai), New York City
-- Full-Stack Backend Architecture Development
-- Data Preprocessing and Cleaning
-- Model Training and Implementation
-- Project Management
-- Instrumental in developing technological foundations and shaping strategic direction of the startup.
+Nov 2024 - Present: AI Engineer, [Social Explorer](https://www.socialexplorer.com/), Sarajevo (hybrid)
+AI engineer at a US demographic data platform serving universities, governments and businesses. I own the AI
+stack end to end, working with a senior full-stack engineer whom I also trained in AI development.
+- Multi-agent chatbot platform: built a model-agnostic data chatbot that searches, fetches and analyses census data,
+  runs statistics and produces tables and charts. Forked it into specialist chatbots for each major product and
+  connected all four to a base router chatbot that delegates questions, summarises answers and links users to the
+  right assistant.
+- Cost optimisation: lowered the cost of chatbot requests through prompt caching, selective context injection
+  and routing work to cheaper models.
+- Semantic search service: built a FastAPI service, now used across the whole Social Explorer stack, that finds
+  metadata tables and geographies in Pinecone. Solved accurate retrieval across 13 million geography records using
+  metadata filters, Microsoft AutoGen agent orchestration and Pydantic structured outputs.
+- Data pipeline: built the pipeline that pulls metadata from AWS, cleans it and upserts it into the vector database.
+- MCP tooling: exposed internal Python endpoints and native .NET application tools as MCP tools, rewriting the .NET
+  endpoints in C#, so every chatbot can use them.
+- SE Sentinel: built a monitoring system for all AI-powered apps that detects failures and wrong answers using
+  decision models (TypeSafe Jev) and agents, and generates regression tests that rerun as a suite.
+- Prompt and context engineering: own all prompt and context engineering across the company's AI products.
 
-Aug 2023 — June 2024: Physics Teacher, [Richmond Park Education](https://secondary.rps.edu.ba/en/), Sarajevo
-- Enthusiasm for sharing the wonders of the universe with students.
-- Creating engaging and interactive learning experiences.
-- Simplifying complex concepts to foster a love for physics.
+Nov 2023 - Present: AI Engineer, Independent Contractor, Remote
+Contract AI engineering for startups and research clients, run alongside my main role. Several projects are under
+NDA, so client details are limited.
+- Lead AI Engineer (contract), AI research assistant (2025 - Present, under NDA): leading the build of an AI research
+  assistant for an international biomedical research consortium. Ran an in-depth analysis of comparable systems
+  (Google AI co-scientist, Claude Code and others) to inform the architecture. Own client communication and UAT
+  presentations.
+- Evaluation framework: built a dynamic framework that assembles evidence packages from systems and codebases and
+  grades them against configurable question banks.
+- Quor AI (2024, 3 months): built a complete FastAPI service that uses small LLMs to return structured outputs in
+  under one second, using Pydantic for validation.
+- AI research project, [BRUSA HyPower](https://www.brusahypower.com/) (2024, under NDA): built an LLM-agent framework
+  for automated code review and unit test generation, and a data pipeline for building code datasets for model
+  fine-tuning. Supervised by Prof. Amila Akagić, Faculty of Electrical Engineering, University of Sarajevo.
+- Caze AI and Skylark AI (Nov 2023 - Jan 2025): backend and AI engineer for two sister startups in New York.
+  Implemented AI features and built FastAPI endpoints for their products.
 
-Sep 2023 — Feb 2024: Sales Automation Director, [Two Lights](https://twolights.dev/), New York City
-- Designed and coded email templates for standardized communication.
-- Automated distribution of personalized emails to clients and stakeholders, improving response times and engagement.
-- Integrated email system with internal databases and CRM platforms.
-- Conducted regular updates and maintenance to enhance system efficiency and reliability.
-- Collaborated with IT and marketing teams to align email automation strategies with business goals.
+Aug 2023 - Jun 2024: Physics Teacher, [Richmond Park Education](https://secondary.rps.edu.ba/en/), Sarajevo
+- Taught secondary school physics, turning complex concepts into clear, interactive lessons.
 
-Mar 2023 — May 2023: Intern, [Symphony](https://symphony.is/), Sarajevo
-- Processed and visualized various types of data.
-- Created a custom plotting library.
-- Modulated and versioned data projects.
-- Developed backend services and databases.
-- Containerized backend services and databases.
-- Familiarized with machine learning models and their implementation.
+Mar 2023 - May 2023: Data Engineering Intern, [Symphony](https://symphony.is/), Sarajevo
+- Processed and visualised data and built a custom plotting library. Built and containerised backend services and
+  databases with Docker, and implemented machine learning models.
 
-Jul 2022 — Aug 2022: Intern, [Cosylab](https://cosylab.com/), Ljubljana
-- Participated in EPICS academy:
-  - Learned Linux, Virtual Machines, GIT, SVN, Python, Shell Scripting, EPICS software.
-  - Designed project architectures.
+Jul 2022 - Aug 2022: Software Intern, EPICS Academy, [Cosylab](https://cosylab.com/), Ljubljana
+Cosylab builds control systems for particle accelerators, lasers, fusion and other large scientific facilities.
+- Final project: built a physics-based weather simulation and wrote control software for an air-conditioning unit,
+  then connected it to real hardware.
+- Trained in Linux, Git, SVN, Python, shell scripting, EPICS control software and project architecture.
 
 Education:
-- Oct 2023 — Present: Master's degree, Applied Physics, [University of Sarajevo](https://fizika.pmf.unsa.ba/)
-  - Currently working on finding the best solution for a flattening filter using Monte Carlo simulations in a program used for simulation of particles.
+- Oct 2023 - Present: Master's degree, Applied Physics, [University of Sarajevo](https://fizika.pmf.unsa.ba/).
+  Coursework complete; thesis defence pending.
+- Sep 2018 - Jan 2023: Bachelor's degree, Applied Physics, [University of Sarajevo](https://fizika.pmf.unsa.ba/).
 
-- Sep 2018 — Jan 2023: Bachelor's degree, Applied Physics, [University of Sarajevo](https://fizika.pmf.unsa.ba/)
-  - Gained strong abilities to solve problems, strong analytical skills, and programming skills.
+Certifications:
+- Anthropic Education, Oct 2026: Building with the Claude API, Introduction to Model Context Protocol,
+  Model Context Protocol: Advanced Topics, Claude with Amazon Bedrock.
+- Anthropic Education, Jul 2026: Claude Code 101, Claude 101.
 
 Skills:
-- Python, Data Analysis, Data Engineering, FastAPI, Git, SQL, SQLAlchemy, Data Science, Machine Learning, Cloud Computing, Docker, Streamlit, Shell Scripting, Web Scraping
-  Programming: Python (FastAPI, Flask), SQL, Shell Scripting
-  Data Visualization: Streamlit, Pandas, Custom Plotting Libraries
-  Modeling: Machine Learning, Data Preprocessing, Model Training, Computer Vision
-  Databases: SQLAlchemy, Postgres, Dockerized Databases, Vector Databases, Pinecone
-  AI: Llama models, LangChain, OpenAI, Groq, AutoGen, Semantic Search, Data Filtering and Reranking
-  Infrastructure: Data Pipeline Development, AI Architecture Design, Multi-Agent Systems
+- AI and LLM engineering: multi-agent systems, agent orchestration, RAG, embeddings and semantic search, prompt and
+  context engineering, structured outputs, MCP, LLM evaluation and monitoring, training dataset curation,
+  cost optimisation
+- Agent frameworks: Claude Agent SDK, OpenAI Agents SDK, Microsoft AutoGen, LangGraph, LangChain, LlamaIndex, CrewAI
+- Anthropic ecosystem (daily use): Claude models and API, Claude Code, MCP, agent skills, subagents,
+  Claude on Amazon Bedrock
+- Other models and providers: OpenAI, Groq, Hugging Face (models, embeddings), Llama, decision models (Jev)
+- Machine learning and data: Pandas, NumPy, SciPy, scikit-learn, Matplotlib, Plotly, data pipelines,
+  web scraping (BeautifulSoup, Playwright)
+- Backend: Python (async), FastAPI, Pydantic, SQLAlchemy, WebSockets and streaming responses, C# / .NET, Streamlit
+- Databases: PostgreSQL, Redis, SQL, Pinecone, Weaviate
+- DevOps and testing: Docker, AWS, GitHub Actions, Git, Linux, shell scripting, pytest, LangSmith
+- Frontend (basic): TypeScript, Node.js
 
-Projects:
-- AI-Driven Data Service | [Social Explorer](https://www.socialexplorer.com/)
-  - Architected comprehensive AI service enabling semantic search across Social Explorer's entire database ecosystem
-  - Implemented FastAPI backend with OpenAI integration and Pinecone vector database for intelligent data retrieval
-  - Developed automated data migration pipelines and advanced filtering/reranking systems
-  - Skills: Python, FastAPI, OpenAI, Pinecone, Vector Databases, Semantic Search, AutoGen
+Languages: Bosnian (native), English (fluent), German (B2)
 
-- External Collaborator | [Faculty of Electrical Engineering (ETF)](https://dsai.etf.unsa.ba/)
-  - Collaborated under Prof. Dr. Amila Akagic. Contributed to data science and AI projects, enhancing research and development efforts.
-  - Skills: Python, Machine Learning, Data Analysis
-
-- AI Model Unit Test Generator | [BrusaHyPower](https://www.brusahypower.com/)
-  - Developed an application using Streamlit with an AI model to generate unit tests for Python code. Implemented Llama2 7B model through LangChain.
-  - Skills: Python, Streamlit, AI Model Training, Prompt Engineering
-
-- AI Model Website App | Data Science Project
-  - Created a comprehensive data science web application using Streamlit for input data, running AI models, and visualizing results. The model could run his output on the website.
-  - Skills: Python, Streamlit, Data Visualization, AI Model Deployment
-
-- Llama3 70B Model Implementation and FastAPI | QUOR AI
-  - Implemented a Llama3 70B model using LangChain and Groq. Developed FastAPI framework and endpoints for model interaction.
-  - Skills: Python, LangChain, Groq, FastAPI
-
-- Dental Management System | MasterLab
-  - Created a full web app for a dental technician firm using Flask and deployed it on Heroku.
-  - Skills: HTML, CSS, Flask, Python, PostgreSQL, Heroku
-  - "link": "https://heroku.com/"
-
-- AI Model Training Code Database
-  - Created a unique code database for training AI models by scraping GitHub repos for Python functions and corresponding unit tests. Evaluated complexity of the function-unit test pairs for AI training.
-  - Each pair was assigned a complexity score based on the number of lines of code, number of functions, and number of loops.
-  - Skills: Python, Web Scraping, Data Analysis, Machine Learning
-  
+References: Prof. Amila Akagić, PhD, Faculty of Electrical Engineering, University of Sarajevo
 """

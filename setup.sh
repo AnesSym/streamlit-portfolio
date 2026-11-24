@@ -1,13 +1,8 @@
 mkdir -p ~/.streamlit/
 
-echo "\
-[server]\n\
-headless = true\n\
-enableCORS=false\n\
-port = $PORT\n\
-[theme]\n\
-primaryColor = '#d33682'\n\
-backgroundColor = '#002b36'\n\
-secondaryBackgroundColor = '#586e75'\n\
-textColor = '#fff'\n\
-" > ~/.streamlit/config.toml
+# Server settings only; the theme lives in the project's .streamlit/config.toml
+cat > ~/.streamlit/config.toml <<EOF
+[server]
+headless = true
+port = $PORT
+EOF
