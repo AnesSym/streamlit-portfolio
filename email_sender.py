@@ -17,10 +17,29 @@ def is_valid_email(user_email):
     return re.match(email_regex, user_email) is not None
 
 
+def get_email_password():
+    """Gmail app password from the environment (.env locally) or Streamlit secrets (Streamlit Cloud).
+
+    Google shows app passwords in groups of four ("abcd efgh ijkl mnop"); the spaces are dropped.
+    """
+    password = os.getenv("EMAIL_PASSWORD")
+    if not password:
+        try:
+            import streamlit as st
+            password = st.secrets.get("EMAIL_PASSWORD")
+        except Exception:  # no secrets file configured
+            password = None
+    return password.replace(" ", "").strip() if password else None
+
+
 def send_email(user_name, user_email, user_message):
-    """Send a contact-form message to my inbox. Returns (ok, detail)."""
+    """Send a contact-form message to my inbox. Returns (ok, detail); detail explains a failure for the logs."""
     if not is_valid_email(user_email):
         return False, "Invalid email address"
+
+    password = get_email_password()
+    if not password:
+        return False, "EMAIL_PASSWORD is not set. Add it as a top-level secret in the app's Secrets settings."
 
     message = MIMEMultipart("alternative")
     message["Subject"] = f"Portfolio message from {user_name}"
@@ -37,9 +56,12 @@ def send_email(user_name, user_email, user_message):
     message.attach(MIMEText(text, "plain"))
 
     try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(RECEIVER_EMAIL, os.getenv("EMAIL_PASSWORD"))
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=20) as server:
+            server.login(RECEIVER_EMAIL, password)
             server.sendmail(RECEIVER_EMAIL, RECEIVER_EMAIL, message.as_string())
         return True, "sent"
-    except Exception as e:
-        return False, f"Error sending email: {e}"
+    except smtplib.SMTPAuthenticationError as e:
+        return False, (f"Gmail rejected the login ({e.smtp_code}). EMAIL_PASSWORD must be a 16-character Gmail "
+                       f"app password, not the account password: {e.smtp_error!r}")
+    except (OSError, smtplib.SMTPException) as e:
+        return False, f"Could not send through smtp.gmail.com:465: {e!r}"
