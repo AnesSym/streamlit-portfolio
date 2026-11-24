@@ -1,6 +1,25 @@
 [theme]
-primaryColor = "#6366F1"  # Modern indigo
-backgroundColor = "#0F0F23"  # Deep dark blue
-secondaryBackgroundColor = "#1E1B4B"  # Dark purple-blue
-textColor = "#E2E8F0"  # Cool light gray
-font = "sans serif"
+base = "dark"
+primaryColor = "#2f7d5c"
+backgroundColor = "#1b1e21"
+secondaryBackgroundColor = "#23272b"
+textColor = "#e4e6e8"
+linkColor = "#e4e6e8"
+borderColor = "#30353a"
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "8px"
+font = "'IBM Plex Sans':https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+codeFont = "'IBM Plex Mono':https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap"
+
+[theme.sidebar]
+backgroundColor = "#1e2124"
+secondaryBackgroundColor = "#26292d"
+
+[server]
+# Serves ./static at app/static/ (the CV download link in the corner)
+enableStaticServing = true
+
+[client]
+# Hides the Deploy button and the main menu so the corner holds only the contact links
+toolbarMode = "minimal"
